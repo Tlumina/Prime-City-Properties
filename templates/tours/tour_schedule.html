@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% block title %}Schedule a Property Tour | {{ site_settings.company_name }}{% endblock %}
+
+{% block content %}
+<section class="py-5 bg-ebony text-white" style="background: var(--pc-ebony);">
+    <div class="container text-center py-3">
+        <span class="pc-hero-motto">VIP Private Inspection</span>
+        <h1 class="font-heading text-white display-5 mb-2">Ready to stop searching and start living?</h1>
+        <p class="text-light opacity-75 mb-0 fs-5">Book a private tour with our senior real estate advisors.</p>
+    </div>
+</section>
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="bg-white p-5 rounded-4 border shadow-sm">
+                <form action="{% url 'tours:schedule' %}" method="post" class="row g-4">
+                    {% csrf_token %}
+                    
+                    <div class="col-md-12">
+                        <label class="form-label fw-bold">Selected Property (Optional)</label>
+                        {{ form.property }}
+                        <div class="form-text">Leave unselected if requesting a general portfolio consultation.</div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">Full Name *</label>
+                        {{ form.full_name }}
+                        {% if form.full_name.errors %}
+                        <div class="text-danger small mt-1">{{ form.full_name.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">Email Address *</label>
+                        {{ form.email }}
+                        {% if form.email.errors %}
+                        <div class="text-danger small mt-1">{{ form.email.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">Phone Number *</label>
+                        {{ form.phone_number }}
+                        {% if form.phone_number.errors %}
+                        <div class="text-danger small mt-1">{{ form.phone_number.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label fw-bold">Preferred Date *</label>
+                        {{ form.preferred_date }}
+                        {% if form.preferred_date.errors %}
+                        <div class="text-danger small mt-1">{{ form.preferred_date.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label fw-bold">Preferred Time *</label>
+                        {{ form.preferred_time }}
+                    </div>
+
+                    <div class="col-md-12">
+                        <label class="form-label fw-bold">Additional Message or Specific Questions (Optional)</label>
+                        {{ form.message }}
+                    </div>
+
+                    <div class="col-md-12 text-center pt-3">
+                        <button type="submit" class="btn btn-pc-primary btn-lg rounded-pill px-5 py-3 fs-6">
+                            <i class="bi bi-check-circle-fill me-2"></i> Schedule My Tour
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

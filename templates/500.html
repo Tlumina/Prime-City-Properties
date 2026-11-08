@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block title %}500 Server Error | {{ site_settings.company_name }}{% endblock %}
+
+{% block content %}
+<div class="container py-5 text-center my-5">
+    <div class="display-1 font-heading text-khaki fw-bold mb-3">500</div>
+    <h2 class="font-heading mb-3">System Maintenance / Temporary Issue</h2>
+    <p class="text-muted max-w-md mx-auto mb-4">
+        We encountered a temporary technical request issue. Our engineering team has been notified. Your user session and submitted information remain completely safe and secure.
+    </p>
+    <div class="d-flex justify-content-center gap-3">
+        <a href="{% url 'core:home' %}" class="btn btn-pc-primary rounded-pill px-4">
+            <i class="bi bi-house me-2"></i> Return Home
+        </a>
+        <a href="javascript:history.back()" class="btn btn-pc-outline rounded-pill px-4">
+            <i class="bi bi-arrow-left me-2"></i> Go Back
+        </a>
+    </div>
+</div>
+{% endblock %}

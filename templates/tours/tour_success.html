@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %}Tour Scheduled Successfully | {{ site_settings.company_name }}{% endblock %}
+
+{% block content %}
+<div class="container py-5 my-5 text-center">
+    <div class="row justify-content-center">
+        <div class="col-lg-7">
+            <div class="bg-white p-5 rounded-4 border shadow-sm">
+                <div class="rounded-circle bg-khaki text-gold d-inline-flex align-items-center justify-content-center mb-4" style="width: 80px; height: 80px; background-color: var(--pc-khaki); color: var(--pc-gold);">
+                    <i class="bi bi-check-lg display-4"></i>
+                </div>
+                <h1 class="font-heading mb-3 text-ebony">Tour Appointment Confirmed!</h1>
+                <p class="fs-5 text-muted mb-4">
+                    Thank you for choosing Prime City Properties. Your tour appointment request has been recorded in our system.
+                </p>
+
+                {% if booking %}
+                <div class="bg-cream p-4 rounded-3 text-start mb-4 border" style="background: var(--pc-cream);">
+                    <h4 class="h6 font-heading text-uppercase text-khaki mb-3">Appointment Receipt Details</h4>
+                    <div class="row g-2 small">
+                        <div class="col-6"><strong>Reference ID:</strong> #PCP-TR-{{ booking.id }}</div>
+                        <div class="col-6"><strong>Client Name:</strong> {{ booking.full_name }}</div>
+                        <div class="col-6"><strong>Requested Date:</strong> {{ booking.preferred_date }}</div>
+                        <div class="col-6"><strong>Requested Time:</strong> {{ booking.preferred_time }}</div>
+                        <div class="col-12"><strong>Target Property:</strong> {{ booking.property.title|default:"General Advisory Walkthrough" }}</div>
+                        <div class="col-12"><strong>Booking Status:</strong> <span class="badge bg-warning text-dark">{{ booking.get_status_display }}</span></div>
+                    </div>
+                </div>
+                {% endif %}
+
+                <p class="small text-muted mb-4">
+                    A dedicated Private Client Advisor will contact you via phone or email shortly to confirm transportation or security access details.
+                </p>
+
+                <div class="d-flex justify-content-center gap-3">
+                    <a href="{% url 'properties:list' %}" class="btn btn-pc-primary rounded-pill px-4">
+                        <i class="bi bi-search me-2"></i> Browse More Properties
+                    </a>
+                    <a href="{% url 'core:home' %}" class="btn btn-pc-outline rounded-pill px-4">
+                        Return to Homepage
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

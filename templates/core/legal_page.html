@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ page.title }} | {{ site_settings.company_name }}{% endblock %}
+
+{% block content %}
+<section class="py-5 bg-ebony text-white" style="background: var(--pc-ebony);">
+    <div class="container text-center py-3">
+        <h1 class="font-heading text-white display-5 mb-2">{{ page.title }}</h1>
+        <p class="text-light opacity-75 mb-0">Last Updated: {{ page.updated_at|date:"F d, Y" }}</p>
+    </div>
+</section>
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-9">
+            <div class="bg-white p-5 rounded-4 border shadow-sm line-height-lg text-dark">
+                {{ page.content|safe }}
+            </div>
+            <div class="mt-4 text-center text-muted small">
+                Note: This statement is structured for operational transparency and compliance. For specific legal inquiries, contact legal@primecityproperties.ng.
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

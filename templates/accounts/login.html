@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block title %}Sign In | {{ site_settings.company_name }}{% endblock %}
+
+{% block content %}
+<section class="py-5 bg-ebony text-white" style="background: var(--pc-ebony);">
+    <div class="container text-center py-3">
+        <h1 class="font-heading text-white display-6 mb-2">Welcome Back</h1>
+        <p class="text-light opacity-75 mb-0">Sign in to manage your tour appointments, listings, or inquiries.</p>
+    </div>
+</section>
+
+<div class="container py-5 my-3">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div class="bg-white p-5 rounded-4 border shadow-sm">
+                <h2 class="font-heading h4 text-ebony mb-4 text-center">Sign In to Your Account</h2>
+
+                <form action="{% url 'accounts:login' %}{% if request.GET.next %}?next={{ request.GET.next }}{% endif %}" method="post" class="d-flex flex-column gap-3">
+                    {% csrf_token %}
+                    <div>
+                        <label class="form-label fw-semibold">Email Address</label>
+                        {{ form.username }}
+                    </div>
+                    <div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <label class="form-label fw-semibold mb-0">Password</label>
+                            <a href="{% url 'accounts:password_reset' %}" class="small text-decoration-none text-muted hover-gold">Forgot Password?</a>
+                        </div>
+                        {{ form.password }}
+                    </div>
+
+                    <button type="submit" class="btn btn-pc-primary py-3 rounded-3 mt-2">
+                        <i class="bi bi-box-arrow-in-right me-2"></i> Sign In
+                    </button>
+                </form>
+
+                <hr class="my-4">
+
+                <div class="text-center small text-muted">
+                    Don't have an account yet? <a href="{% url 'accounts:signup' %}" class="fw-bold text-khaki">Create an Account</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends "admin/index.html" %}
+{% load i18n static %}
+
+{% block content_title %}
+    <h1>Prime City Properties - Enterprise Management Dashboard</h1>
+    <p class="help" style="color: #666; font-size: 0.95rem; margin-top: 5px;">
+        Company Motto: <em>“Stop Searching. Start Living.”</em> | Logged in as: <strong>{{ user.get_full_name|default:user.email }}</strong>
+    </p>
+    <hr style="border: 0; border-top: 1px solid #ddd; margin: 20px 0;">
+{% endblock %}
+
+{% block sidebar %}
+    {{ block.super }}
+{% endblock %}

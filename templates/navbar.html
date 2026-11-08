@@ -1,0 +1,65 @@
+<nav class="navbar navbar-expand-lg pc-navbar">
+    <div class="container">
+        <a class="navbar-brand pc-brand" href="{% url 'core:home' %}">
+            <div class="pc-brand-logo">P</div>
+            <div>
+                <div class="pc-brand-title">PRIME CITY</div>
+                <div class="pc-brand-sub">PROPERTIES</div>
+            </div>
+        </a>
+
+        <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="bi bi-list fs-1 text-dark"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarContent">
+            <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link pc-nav-link {% if request.resolver_match.view_name == 'core:home' %}active{% endif %}" href="{% url 'core:home' %}">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link pc-nav-link {% if 'listings' in request.path %}active{% endif %}" href="{% url 'properties:list' %}">Listings</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link pc-nav-link {% if request.resolver_match.view_name == 'core:about' %}active{% endif %}" href="{% url 'core:about' %}">About Us</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link pc-nav-link {% if 'tour' in request.path and 'manage' not in request.path %}active{% endif %}" href="{% url 'tours:schedule' %}">Tour</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link pc-nav-link {% if 'contact' in request.path %}active{% endif %}" href="{% url 'contact:index' %}">Contact</a>
+                </li>
+            </ul>
+
+            <div class="d-flex align-items-center gap-2">
+                {% if user.is_authenticated %}
+                <div class="dropdown">
+                    <button class="btn btn-pc-outline btn-sm rounded-pill dropdown-toggle d-flex align-items-center gap-2 px-3" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-person-circle text-gold fs-5"></i>
+                        <span>{{ user.first_name|default:user.email }}</span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2">
+                        <li><a class="dropdown-item py-2" href="{% url 'accounts:dashboard' %}"><i class="bi bi-speedometer2 me-2 text-khaki"></i> My Dashboard</a></li>
+                        {% if user.is_real_estate_agent or user.is_staff %}
+                        <li><a class="dropdown-item py-2" href="{% url 'properties:create' %}"><i class="bi bi-plus-circle me-2 text-khaki"></i> + Add House Listing</a></li>
+                        {% endif %}
+                        {% if user.is_staff %}
+                        <li><a class="dropdown-item py-2" href="{% url 'tours:manage' %}"><i class="bi bi-calendar-check me-2 text-khaki"></i> Staff Tour Portal</a></li>
+                        <li><a class="dropdown-item py-2" href="/admin/" target="_blank"><i class="bi bi-shield-lock me-2 text-khaki"></i> Admin Console</a></li>
+                        {% endif %}
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item py-2 text-danger" href="{% url 'accounts:logout' %}"><i class="bi bi-box-arrow-right me-2"></i> Sign Out</a></li>
+                    </ul>
+                </div>
+                {% else %}
+                <a href="{% url 'accounts:login' %}" class="btn btn-link text-ebony text-decoration-none fw-medium btn-sm px-2">Sign In</a>
+                <a href="{% url 'accounts:signup' %}" class="btn btn-pc-outline btn-sm rounded-pill px-3">Sign Up</a>
+                {% endif %}
+
+                <a href="{% url 'tours:schedule' %}" class="btn btn-pc-primary btn-sm rounded-pill px-3 d-none d-sm-inline-flex">
+                    <i class="bi bi-calendar-event"></i> Schedule Tour
+                </a>
+            </div>
+        </div>
+    </div>
+</nav>

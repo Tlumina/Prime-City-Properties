@@ -1,0 +1,157 @@
+{% extends 'base.html' %}
+
+{% block title %}Tour Bookings Dashboard | {{ site_settings.company_name }}{% endblock %}
+
+{% block content %}
+<section class="py-4 bg-ebony text-white" style="background: var(--pc-ebony);">
+    <div class="container">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+            <div>
+                <span class="badge bg-gold text-dark text-uppercase mb-2">Staff Portal</span>
+                <h1 class="font-heading text-white h2 mb-1"><i class="bi bi-calendar-check me-2 text-gold"></i> Tour Bookings & Appointments</h1>
+                <p class="text-light opacity-75 mb-0 small">Manage and update all property tour appointments booked by website visitors.</p>
+            </div>
+            <div>
+                <a href="/admin/tours/tourbooking/" class="btn btn-outline-light btn-sm rounded-pill px-3">
+                    <i class="bi bi-shield-lock me-1"></i> Open in Django Admin
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container py-5">
+    <!-- Stats Cards -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-3 col-6">
+            <div class="p-3 bg-white border rounded-4 shadow-sm text-center">
+                <div class="text-muted small text-uppercase">Total Bookings</div>
+                <div class="h3 font-heading text-ebony mb-0 mt-1">{{ stats.total }}</div>
+            </div>
+        </div>
+        <div class="col-md-3 col-6">
+            <div class="p-3 bg-warning-subtle border border-warning rounded-4 shadow-sm text-center">
+                <div class="text-warning-emphasis small text-uppercase fw-bold">Pending Approval</div>
+                <div class="h3 font-heading text-warning-emphasis mb-0 mt-1">{{ stats.pending }}</div>
+            </div>
+        </div>
+        <div class="col-md-3 col-6">
+            <div class="p-3 bg-success-subtle border border-success rounded-4 shadow-sm text-center">
+                <div class="text-success small text-uppercase fw-bold">Confirmed</div>
+                <div class="h3 font-heading text-success mb-0 mt-1">{{ stats.confirmed }}</div>
+            </div>
+        </div>
+        <div class="col-md-3 col-6">
+            <div class="p-3 bg-info-subtle border border-info rounded-4 shadow-sm text-center">
+                <div class="text-info-emphasis small text-uppercase fw-bold">Completed</div>
+                <div class="h3 font-heading text-info-emphasis mb-0 mt-1">{{ stats.completed }}</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filter & Search Controls -->
+    <div class="bg-white p-4 rounded-4 border mb-4 shadow-sm">
+        <form action="{% url 'tours:manage' %}" method="get" class="row g-3 align-items-center">
+            <div class="col-md-4">
+                <div class="input-group">
+                    <span class="input-group-text bg-cream border-end-0"><i class="bi bi-search"></i></span>
+                    <input type="text" name="q" value="{{ search_query }}" class="form-control luxury-input border-start-0" placeholder="Search client, email, phone, or property...">
+                </div>
+            </div>
+            <div class="col-md-4">
+                <select name="status" class="form-select luxury-select" onchange="this.form.submit()">
+                    <option value="">All Booking Statuses</option>
+                    {% for code, label in status_choices %}
+                    <option value="{{ code }}" {% if status_filter == code %}selected{% endif %}>{{ label }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-4 d-flex gap-2">
+                <button type="submit" class="btn btn-pc-primary">Filter Results</button>
+                <a href="{% url 'tours:manage' %}" class="btn btn-pc-outline">Reset</a>
+            </div>
+        </form>
+    </div>
+
+    <!-- Bookings Table -->
+    <div class="bg-white rounded-4 border overflow-hidden shadow-sm">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th class="ps-4">Ref ID</th>
+                        <th>Client Details</th>
+                        <th>Target Property</th>
+                        <th>Requested Date & Time</th>
+                        <th>Status</th>
+                        <th class="pe-4 text-end">Update Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for booking in bookings %}
+                    <tr>
+                        <td class="ps-4 fw-bold text-khaki">#PCP-TR-{{ booking.id }}</td>
+                        <td>
+                            <div class="fw-bold text-ebony">{{ booking.full_name }}</div>
+                            <div class="small text-muted"><i class="bi bi-envelope me-1"></i> {{ booking.email }}</div>
+                            <div class="small text-muted"><i class="bi bi-telephone me-1"></i> {{ booking.phone_number }}</div>
+                        </td>
+                        <td>
+                            {% if booking.property %}
+                            <div class="fw-medium">
+                                <a href="{{ booking.property.get_absolute_url }}" target="_blank" class="text-ebony text-decoration-underline">{{ booking.property.title }}</a>
+                            </div>
+                            <div class="small text-muted"><i class="bi bi-geo-alt me-1"></i> {{ booking.property.location.name }}</div>
+                            {% else %}
+                            <span class="badge bg-secondary-subtle text-secondary">General Advisory Tour</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div class="fw-medium"><i class="bi bi-calendar-event me-1 text-khaki"></i> {{ booking.preferred_date|date:"D, M d, Y" }}</div>
+                            <div class="small text-muted"><i class="bi bi-clock me-1 text-khaki"></i> {{ booking.preferred_time }}</div>
+                        </td>
+                        <td>
+                            {% if booking.status == 'PENDING' %}
+                            <span class="badge bg-warning text-dark px-3 py-2">Pending</span>
+                            {% elif booking.status == 'CONFIRMED' %}
+                            <span class="badge bg-success px-3 py-2">Confirmed</span>
+                            {% elif booking.status == 'COMPLETED' %}
+                            <span class="badge bg-info text-dark px-3 py-2">Completed</span>
+                            {% else %}
+                            <span class="badge bg-danger px-3 py-2">Cancelled</span>
+                            {% endif %}
+                        </td>
+                        <td class="pe-4 text-end">
+                            <form action="{% url 'tours:manage' %}" method="post" class="d-inline-flex gap-2 align-items-center">
+                                {% csrf_token %}
+                                <input type="hidden" name="booking_id" value="{{ booking.id }}">
+                                <select name="status" class="form-select form-select-sm luxury-select" style="min-width: 140px;">
+                                    {% for code, label in status_choices %}
+                                    <option value="{{ code }}" {% if booking.status == code %}selected{% endif %}>{{ label }}</option>
+                                    {% endfor %}
+                                </select>
+                                <button type="submit" class="btn btn-pc-primary btn-sm px-3" title="Save Status Change">Save</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% if booking.message %}
+                    <tr class="table-light">
+                        <td colspan="6" class="ps-4 pe-4 py-2 small text-muted">
+                            <i class="bi bi-chat-left-text me-1 text-khaki"></i> <strong>Client Special Request:</strong> “{{ booking.message }}”
+                        </td>
+                    </tr>
+                    {% endif %}
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" class="text-center py-5 text-muted">
+                            <i class="bi bi-calendar-x display-4 d-block mb-3 text-muted"></i>
+                            No tour bookings found matching your search criteria.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

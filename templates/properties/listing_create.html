@@ -1,0 +1,159 @@
+{% extends 'base.html' %}
+
+{% block title %}Add New House Listing | {{ site_settings.company_name }}{% endblock %}
+
+{% block content %}
+<section class="py-5 bg-ebony text-white" style="background: var(--pc-ebony);">
+    <div class="container text-center py-3">
+        <span class="pc-hero-motto">Agent & Staff Portal</span>
+        <h1 class="font-heading text-white display-6 mb-2">+ Add New House Listing</h1>
+        <p class="text-light opacity-75 mb-0">Publish a new luxury property listing to the Prime City Properties network.</p>
+    </div>
+</section>
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-9">
+            <div class="bg-white p-5 rounded-4 border shadow-sm">
+                <form action="{% url 'properties:create' %}" method="post" enctype="multipart/form-data" class="row g-4">
+                    {% csrf_token %}
+
+                    <div class="col-12">
+                        <h3 class="h5 font-heading text-khaki border-bottom pb-2 mb-3">1. Basic Property Information</h3>
+                    </div>
+
+                    <div class="col-md-8">
+                        <label class="form-label fw-bold">Property Title *</label>
+                        {{ form.title }}
+                        {% if form.title.errors %}<div class="text-danger small mt-1">{{ form.title.errors.0 }}</div>{% endif %}
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold">Property Type *</label>
+                        {{ form.property_type }}
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">Price in Nigerian Naira (₦) *</label>
+                        {{ form.price }}
+                        {% if form.price.errors %}<div class="text-danger small mt-1">{{ form.price.errors.0 }}</div>{% endif %}
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label fw-bold">Price Label</label>
+                        {{ form.price_label }}
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label fw-bold">Status *</label>
+                        {{ form.status }}
+                    </div>
+
+                    <div class="col-12">
+                        <label class="form-label fw-bold">Short Summary / Description *</label>
+                        {{ form.description }}
+                    </div>
+
+                    <div class="col-12">
+                        <label class="form-label fw-bold">Detailed Property Story ("What Makes This Property Special?") *</label>
+                        {{ form.detailed_story }}
+                    </div>
+
+                    <div class="col-12 pt-3">
+                        <h3 class="h5 font-heading text-khaki border-bottom pb-2 mb-3">2. Location & Address</h3>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold">Nigerian City/Node Location *</label>
+                        {{ form.location }}
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold">Street Address / Estate *</label>
+                        {{ form.address }}
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold">Nearby Landmarks</label>
+                        {{ form.landmark_notes }}
+                    </div>
+
+                    <div class="col-12 pt-3">
+                        <h3 class="h5 font-heading text-khaki border-bottom pb-2 mb-3">3. Specifications & Features</h3>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label fw-bold">Bedrooms</label>
+                        {{ form.bedrooms }}
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label fw-bold">Bathrooms</label>
+                        {{ form.bathrooms }}
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label fw-bold">Garage Spaces</label>
+                        {{ form.garage_spaces }}
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label fw-bold">Area Size (sqm)</label>
+                        {{ form.size_sqm }}
+                    </div>
+
+                    <div class="col-12">
+                        <div class="form-check">
+                            {{ form.has_swimming_pool }}
+                            <label class="form-check-label fw-bold" for="{{ form.has_swimming_pool.id_for_label }}">Property includes Swimming Pool</label>
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <label class="form-label fw-bold mb-2">Amenities & Legal Titles</label>
+                        <div class="row g-2">
+                            {% for checkbox in form.features %}
+                            <div class="col-md-4">
+                                <div class="p-2 border rounded-3 bg-light">
+                                    {{ checkbox }}
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="col-12 pt-3">
+                        <h3 class="h5 font-heading text-khaki border-bottom pb-2 mb-3"><i class="bi bi-camera me-2"></i>4. Property Photography (Gallery Uploads)</h3>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">{{ form.primary_image.label }}</label>
+                        {{ form.primary_image }}
+                        <div class="form-text text-muted">{{ form.primary_image.help_text }}</div>
+                        {% if form.primary_image.errors %}<div class="text-danger small mt-1">{{ form.primary_image.errors.0 }}</div>{% endif %}
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">{{ form.gallery_images.label }}</label>
+                        {{ form.gallery_images }}
+                        <div class="form-text text-muted">{{ form.gallery_images.help_text }}</div>
+                        {% if form.gallery_images.errors %}<div class="text-danger small mt-1">{{ form.gallery_images.errors.0 }}</div>{% endif %}
+                    </div>
+
+                    <div class="col-12">
+                        <label class="form-label fw-bold">{{ form.primary_image_url.label }}</label>
+                        {{ form.primary_image_url }}
+                        <div class="form-text text-muted">{{ form.primary_image_url.help_text }}</div>
+                    </div>
+
+                    <div class="col-12 text-center pt-4">
+                        <button type="submit" class="btn btn-pc-primary btn-lg rounded-pill px-5 py-3">
+                            <i class="bi bi-check-circle-fill me-2"></i> Publish Listing Now
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

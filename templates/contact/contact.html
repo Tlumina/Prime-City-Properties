@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+
+{% block title %}Contact Us | {{ site_settings.company_name }}{% endblock %}
+
+{% block content %}
+<!-- Header -->
+<section class="py-5 bg-ebony text-white" style="background: var(--pc-ebony);">
+    <div class="container text-center py-3">
+        <h1 class="font-heading text-white display-5 mb-2">Contact Prime City Properties</h1>
+        <p class="text-light opacity-75 mb-0 fs-5">Speak with our private client advisory team today.</p>
+    </div>
+</section>
+
+<div class="container py-5">
+    <div class="row g-5">
+        <!-- Contact Cards & Info (Left Column) -->
+        <div class="col-lg-5">
+            <h2 class="font-heading h3 mb-4">Get In Touch</h2>
+            <p class="text-muted mb-4">
+                Whether inquiring about luxury acquisitions, verified land investments, or commercial leases, our senior directors are at your service.
+            </p>
+
+            <div class="d-flex flex-column gap-3">
+                <div class="p-4 bg-white rounded-4 border d-flex gap-3 align-items-start">
+                    <div class="rounded-circle bg-khaki text-gold p-3 fs-4 d-flex align-items-center justify-content-center" style="width: 50px; height: 50px; background-color: var(--pc-khaki); color: var(--pc-gold);">
+                        <i class="bi bi-geo-alt-fill"></i>
+                    </div>
+                    <div>
+                        <h3 class="h6 font-heading mb-1 text-ebony">Headquarters Office</h3>
+                        <p class="small text-muted mb-0">{{ site_settings.office_address }}</p>
+                    </div>
+                </div>
+
+                <div class="p-4 bg-white rounded-4 border d-flex gap-3 align-items-start">
+                    <div class="rounded-circle bg-khaki text-gold p-3 fs-4 d-flex align-items-center justify-content-center" style="width: 50px; height: 50px; background-color: var(--pc-khaki); color: var(--pc-gold);">
+                        <i class="bi bi-telephone-fill"></i>
+                    </div>
+                    <div>
+                        <h3 class="h6 font-heading mb-1 text-ebony">Phone & Direct Hotline</h3>
+                        <p class="small text-muted mb-0">{{ site_settings.phone_number }}</p>
+                    </div>
+                </div>
+
+                <div class="p-4 bg-white rounded-4 border d-flex gap-3 align-items-start">
+                    <div class="rounded-circle bg-khaki text-gold p-3 fs-4 d-flex align-items-center justify-content-center" style="width: 50px; height: 50px; background-color: var(--pc-khaki); color: var(--pc-gold);">
+                        <i class="bi bi-envelope-fill"></i>
+                    </div>
+                    <div>
+                        <h3 class="h6 font-heading mb-1 text-ebony">Email Advisory Desk</h3>
+                        <p class="small text-muted mb-0">{{ site_settings.email }}</p>
+                    </div>
+                </div>
+
+                <div class="p-4 bg-white rounded-4 border d-flex gap-3 align-items-start">
+                    <div class="rounded-circle bg-khaki text-gold p-3 fs-4 d-flex align-items-center justify-content-center" style="width: 50px; height: 50px; background-color: var(--pc-khaki); color: var(--pc-gold);">
+                        <i class="bi bi-clock-fill"></i>
+                    </div>
+                    <div>
+                        <h3 class="h6 font-heading mb-1 text-ebony">Business Operating Hours</h3>
+                        <p class="small text-muted mb-0">{{ site_settings.business_hours }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact Form (Right Column) -->
+        <div class="col-lg-7">
+            <div class="bg-white p-5 rounded-4 border shadow-sm">
+                <h2 class="font-heading h3 mb-2">Leave Us a Message</h2>
+                <p class="text-muted mb-4">Complete the form below and an advisor will respond within 2 business hours.</p>
+
+                <form action="{% url 'contact:index' %}" method="post" class="row g-3">
+                    {% csrf_token %}
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">Your Name *</label>
+                        {{ form.name }}
+                        {% if form.name.errors %}<div class="text-danger small mt-1">{{ form.name.errors.0 }}</div>{% endif %}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">Email Address *</label>
+                        {{ form.email }}
+                        {% if form.email.errors %}<div class="text-danger small mt-1">{{ form.email.errors.0 }}</div>{% endif %}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">Phone Number</label>
+                        {{ form.phone_number }}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">Subject</label>
+                        {{ form.subject }}
+                    </div>
+                    <div class="col-md-12">
+                        <label class="form-label fw-semibold">Your Message *</label>
+                        {{ form.message }}
+                        {% if form.message.errors %}<div class="text-danger small mt-1">{{ form.message.errors.0 }}</div>{% endif %}
+                    </div>
+                    <div class="col-md-12 pt-2">
+                        <button type="submit" class="btn btn-pc-primary btn-lg rounded-pill px-5 py-3 fs-6">
+                            <i class="bi bi-send-fill me-2"></i> Send Message
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

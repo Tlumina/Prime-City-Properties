@@ -1,0 +1,167 @@
+{% extends 'base.html' %}
+{% load humanize %}
+
+{% block title %}Property Listings | {{ site_settings.company_name }}{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<section class="py-5 bg-ebony text-white" style="background: var(--pc-ebony);">
+    <div class="container text-center py-3">
+        <h1 class="font-heading text-white display-5 mb-2">Prime Real Estate Listings</h1>
+        <p class="text-light opacity-75 mb-0">Browse luxury mansions, penthouses, duplexes, and plots across Nigeria.</p>
+    </div>
+</section>
+
+<div class="container py-5">
+    <div class="row g-4">
+        <!-- Filter Sidebar -->
+        <div class="col-lg-3">
+            <div class="bg-white p-4 rounded-4 border sticky-top" style="top: 100px; z-index: 10;">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h3 class="h5 font-heading mb-0"><i class="bi bi-funnel me-2 text-khaki"></i> Filter Properties</h3>
+                    <a href="{% url 'properties:list' %}" class="small text-muted text-decoration-underline">Reset All</a>
+                </div>
+
+                <form action="{% url 'properties:list' %}" method="get" class="d-flex flex-column gap-3">
+                    <div>
+                        <label class="form-label small fw-bold text-uppercase text-muted">Keyword Search</label>
+                        {{ form.keyword }}
+                    </div>
+                    <div>
+                        <label class="form-label small fw-bold text-uppercase text-muted">Location</label>
+                        {{ form.location }}
+                    </div>
+                    <div>
+                        <label class="form-label small fw-bold text-uppercase text-muted">Property Type</label>
+                        {{ form.property_type }}
+                    </div>
+                    <div>
+                        <label class="form-label small fw-bold text-uppercase text-muted">Status</label>
+                        {{ form.status }}
+                    </div>
+                    <div class="row g-2">
+                        <div class="col-6">
+                            <label class="form-label small fw-bold text-uppercase text-muted">Min Beds</label>
+                            {{ form.bedrooms }}
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label small fw-bold text-uppercase text-muted">Min Baths</label>
+                            {{ form.bathrooms }}
+                        </div>
+                    </div>
+                    <div class="row g-2">
+                        <div class="col-6">
+                            <label class="form-label small fw-bold text-uppercase text-muted">Min Price (₦)</label>
+                            {{ form.min_price }}
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label small fw-bold text-uppercase text-muted">Max Price (₦)</label>
+                            {{ form.max_price }}
+                        </div>
+                    </div>
+                    <div>
+                        <label class="form-label small fw-bold text-uppercase text-muted">Min Area (sqm)</label>
+                        {{ form.min_sqm }}
+                    </div>
+                    <div class="d-flex flex-column gap-2 pt-2">
+                        <div class="form-check">
+                            {{ form.has_garage }}
+                            <label class="form-check-label small" for="filter_garage">Garage Available</label>
+                        </div>
+                        <div class="form-check">
+                            {{ form.has_pool }}
+                            <label class="form-check-label small" for="filter_pool">Swimming Pool</label>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="form-label small fw-bold text-uppercase text-muted">Sort By</label>
+                        {{ form.sort_by }}
+                    </div>
+
+                    <button type="submit" class="btn btn-pc-primary w-100 mt-2">
+                        <i class="bi bi-filter me-1"></i> Apply Filters
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Property Grid -->
+        <div class="col-lg-9">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div class="text-muted">
+                    Showing <strong class="text-ebony">{{ properties|length }}</strong> of <strong class="text-ebony">{{ total_count }}</strong> verified properties
+                </div>
+            </div>
+
+            <div class="row g-4">
+                {% for property in properties %}
+                <div class="col-md-6 col-lg-4">
+                    <div class="pc-property-card">
+                        <div class="pc-card-img-wrapper">
+                            <img src="{{ property.primary_image }}" alt="{{ property.title }}" class="pc-card-img" loading="lazy">
+                            <span class="pc-badge-status">{{ property.get_status_display }}</span>
+                            {% if property.is_featured %}
+                            <span class="pc-badge-featured"><i class="bi bi-star-fill me-1"></i> Featured</span>
+                            {% endif %}
+                        </div>
+                        <div class="pc-card-body">
+                            <div class="pc-card-price">{{ property.formatted_price }} <small class="fs-6 text-muted fw-normal">{{ property.price_label|default:'' }}</small></div>
+                            <h3 class="pc-card-title">
+                                <a href="{{ property.get_absolute_url }}">{{ property.title }}</a>
+                            </h3>
+                            <div class="pc-card-location">
+                                <i class="bi bi-geo-alt-fill text-gold" style="color: var(--pc-gold);"></i>
+                                {{ property.location.name }}, {{ property.location.city }}
+                            </div>
+                            <div class="pc-card-specs">
+                                <div class="pc-spec-item" title="Bedrooms"><i class="bi bi-door-open fs-5 text-muted"></i> {{ property.bedrooms }} Beds</div>
+                                <div class="pc-spec-item" title="Bathrooms"><i class="bi bi-droplet fs-5 text-muted"></i> {{ property.bathrooms }} Baths</div>
+                                <div class="pc-spec-item" title="Area Size"><i class="bi bi-aspect-ratio fs-5 text-muted"></i> {{ property.size_sqm }} sqm</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-12 py-5 text-center bg-white rounded-4 border">
+                    <i class="bi bi-search display-3 text-muted mb-3 d-block"></i>
+                    <h3 class="font-heading">No Properties Found</h3>
+                    <p class="text-muted">No properties match your current search criteria. Try relaxing your price or location filters.</p>
+                    <a href="{% url 'properties:list' %}" class="btn btn-pc-primary rounded-pill px-4 mt-2">Reset Filters</a>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Pagination -->
+            {% if is_paginated %}
+            <nav class="mt-5">
+                <ul class="pagination justify-content-center gap-2">
+                    {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link rounded-circle text-dark" href="?page={{ page_obj.previous_page_number }}{% if query_string %}&{{ query_string }}{% endif %}">&laquo;</a>
+                    </li>
+                    {% endif %}
+
+                    {% for num in paginator.page_range %}
+                    {% if page_obj.number == num %}
+                    <li class="page-item active">
+                        <span class="page-link rounded-circle bg-khaki border-khaki text-white">{{ num }}</span>
+                    </li>
+                    {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                    <li class="page-item">
+                        <a class="page-link rounded-circle text-dark" href="?page={{ num }}{% if query_string %}&{{ query_string }}{% endif %}">{{ num }}</a>
+                    </li>
+                    {% endif %}
+                    {% endfor %}
+
+                    {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link rounded-circle text-dark" href="?page={{ page_obj.next_page_number }}{% if query_string %}&{{ query_string }}{% endif %}">&raquo;</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

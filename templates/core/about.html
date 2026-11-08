@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+
+{% block title %}About Us | {{ site_settings.company_name }}{% endblock %}
+
+{% block content %}
+<section class="py-5 bg-ebony text-white" style="background: var(--pc-ebony);">
+    <div class="container text-center py-3">
+        <span class="pc-hero-motto">Integrity & Distinction</span>
+        <h1 class="font-heading text-white display-5 mb-2">About Prime City Properties</h1>
+        <p class="text-light opacity-75 mb-0 fs-5 max-w-lg mx-auto">Redefining luxury real estate acquisitions and legal
+            transparency in Nigeria.</p>
+    </div>
+</section>
+
+<div class="container py-5">
+    <!-- Story -->
+    <div class="row align-items-center g-5 my-4">
+        <div class="col-lg-6">
+            <h2 class="font-heading display-6 text-ebony mb-4">“Stop Searching. Start Living.”</h2>
+            <p class="fs-5 text-muted mb-4">
+                Prime City Properties was founded to bridge the gap between discerning high-net-worth real estate buyers
+                and authenticated luxury properties across Nigeria.
+            </p>
+            <p class="text-dark opacity-90 mb-4">
+                We specialize in prime urban developments, executive penthouses, waterfront villas, and verified dry
+                land banking across Alagbaka, Lekki Phase 1, Ikoyi, Victoria Island, Banana Island, Maitama Abuja, and
+                Port Harcourt. Every asset in our portfolio undergoes rigorous legal due diligence to guarantee clear,
+                unencumbered titles.
+            </p>
+        </div>
+        <div class="col-lg-6">
+            <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80"
+                alt="Prime City Properties Architecture" class="img-fluid rounded-4 shadow-lg">
+        </div>
+    </div>
+
+    <!-- Mission Vision Values -->
+    <div class="row g-4 my-5">
+        <div class="col-md-4">
+            <div class="p-4 bg-white rounded-4 border h-100 shadow-sm">
+                <div class="fs-1 text-gold mb-3" style="color: var(--pc-gold);"><i class="bi bi-compass"></i></div>
+                <h3 class="font-heading h4 mb-3">Our Mission</h3>
+                <p class="text-muted mb-0">
+                    To empower clients with seamless, secure, and transparent access to premium Nigerian real estate
+                    assets while eliminating legal risk and transactional friction.
+                </p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="p-4 bg-white rounded-4 border h-100 shadow-sm">
+                <div class="fs-1 text-gold mb-3" style="color: var(--pc-gold);"><i class="bi bi-eye"></i></div>
+                <h3 class="font-heading h4 mb-3">Our Vision</h3>
+                <p class="text-muted mb-0">
+                    To be West Africa’s most trusted luxury real estate advisory firm, recognized for institutional
+                    excellence, design sophistication, and unyielding integrity.
+                </p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="p-4 bg-white rounded-4 border h-100 shadow-sm">
+                <div class="fs-1 text-gold mb-3" style="color: var(--pc-gold);"><i class="bi bi-shield-check"></i></div>
+                <h3 class="font-heading h4 mb-3">Our Core Values</h3>
+                <p class="text-muted mb-0">
+                    Trust & Legal Perfection, Client Discretion, Architectural Superiority, Sustainable Community
+                    Development, and Prompt Execution.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- CTA -->
+<section class="py-5 bg-cream text-center" style="background: var(--pc-cream);">
+    <div class="container py-3">
+        <h2 class="font-heading mb-3">Ready to Begin Your Real Estate Journey?</h2>
+        <p class="text-muted mb-4">Explore our current inventory of verified luxury properties.</p>
+        <a href="{% url 'properties:list' %}" class="btn btn-pc-primary btn-lg rounded-pill px-5">
+            <i class="bi bi-building me-2"></i> View Available Listings
+        </a>
+    </div>
+</section>
+{% endblock %}

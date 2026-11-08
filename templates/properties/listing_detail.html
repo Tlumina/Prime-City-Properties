@@ -1,0 +1,168 @@
+{% extends 'base.html' %}
+{% load humanize %}
+
+{% block title %}{{ property.title }} | Prime City Properties{% endblock %}
+{% block meta_description %}{{ property.description|truncatewords:25 }}{% endblock %}
+
+{% block content %}
+<!-- Property Header Banner -->
+<section class="py-4 bg-ebony text-white" style="background: var(--pc-ebony);">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-2 small text-light opacity-75">
+                <li class="breadcrumb-item"><a href="{% url 'core:home' %}" class="text-white">Home</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'properties:list' %}" class="text-white">Listings</a></li>
+                <li class="breadcrumb-item active text-gold" style="color: var(--pc-gold);" aria-current="page">{{ property.location.name }}</li>
+            </ol>
+        </nav>
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+            <div>
+                <h1 class="font-heading text-white h2 mb-1">{{ property.title }}</h1>
+                <p class="mb-0 text-light opacity-75"><i class="bi bi-geo-alt-fill text-gold" style="color: var(--pc-gold);"></i> {{ property.address }}, {{ property.location.name }}, {{ property.location.city }}</p>
+            </div>
+            <div class="text-md-end">
+                <div class="h2 font-heading text-gold mb-0" style="color: var(--pc-gold);">{{ property.formatted_price }} <small class="fs-6 text-white-50">{{ property.price_label|default:'' }}</small></div>
+                <span class="badge bg-gold text-dark text-uppercase px-3 py-2 mt-1">{{ property.get_status_display }}</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container py-5">
+    <div class="row g-5">
+        <!-- Main Content (Left Column) -->
+        <div class="col-lg-8">
+            <!-- 1. GALLERY SECTION -->
+            <div class="mb-5">
+                <div class="position-relative rounded-4 overflow-hidden mb-3 border shadow-sm" style="max-height: 480px;">
+                    <img id="mainGalleryImage" src="{{ property.primary_image }}" alt="{{ property.title }}" class="w-100 h-100 object-fit-cover transition-all" style="height: 480px; object-fit: cover;">
+                </div>
+                {% if images %}
+                <div class="d-flex gap-2 overflow-x-auto pb-2">
+                    {% for img in images %}
+                    <img src="{{ img.get_image_url }}" alt="{{ img.caption }}" class="pc-gallery-thumb rounded-3 border {% if forloop.first %}active{% endif %}" data-img-src="{{ img.get_image_url }}" style="width: 100px; height: 75px; object-fit: cover; cursor: pointer;">
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- 2. QUICK SPECS STRIP -->
+            <div class="bg-white p-4 rounded-4 border mb-5 shadow-sm">
+                <div class="row text-center g-3">
+                    <div class="col-3 border-end">
+                        <div class="text-muted small text-uppercase">Bedrooms</div>
+                        <div class="h4 font-heading mb-0 text-ebony"><i class="bi bi-door-open text-khaki me-1"></i> {{ property.bedrooms }}</div>
+                    </div>
+                    <div class="col-3 border-end">
+                        <div class="text-muted small text-uppercase">Bathrooms</div>
+                        <div class="h4 font-heading mb-0 text-ebony"><i class="bi bi-droplet text-khaki me-1"></i> {{ property.bathrooms }}</div>
+                    </div>
+                    <div class="col-3 border-end">
+                        <div class="text-muted small text-uppercase">Garage</div>
+                        <div class="h4 font-heading mb-0 text-ebony"><i class="bi bi-car-front text-khaki me-1"></i> {{ property.garage_spaces }}</div>
+                    </div>
+                    <div class="col-3">
+                        <div class="text-muted small text-uppercase">Total Area</div>
+                        <div class="h4 font-heading mb-0 text-ebony"><i class="bi bi-aspect-ratio text-khaki me-1"></i> {{ property.size_sqm }} sqm</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. OVERVIEW & STORY -->
+            <div class="mb-5">
+                <h3 class="font-heading h4 mb-3 border-bottom pb-2">Property Summary</h3>
+                <p class="fs-5 text-muted mb-4">{{ property.description }}</p>
+
+                <div class="bg-cream p-4 rounded-4 border mb-4" style="background: var(--pc-cream);">
+                    <h4 class="font-heading h5 text-ebony mb-3"><i class="bi bi-stars text-gold me-2" style="color: var(--pc-gold);"></i> What Makes This Property Special?</h4>
+                    <p class="mb-0 text-dark opacity-90 line-height-lg">{{ property.detailed_story|linebreaks }}</p>
+                </div>
+            </div>
+
+            <!-- 4. AMENITIES & FEATURES -->
+            {% if property.features.all %}
+            <div class="mb-5">
+                <h3 class="font-heading h4 mb-3 border-bottom pb-2">Amenities & Infrastructure</h3>
+                <div class="row g-3">
+                    {% for feat in property.features.all %}
+                    <div class="col-md-6">
+                        <div class="d-flex align-items-center gap-3 p-3 bg-white border rounded-3">
+                            <i class="bi {{ feat.icon_class|default:'bi-check-circle-fill' }} fs-4 text-gold" style="color: var(--pc-gold);"></i>
+                            <span class="fw-medium text-ebony">{{ feat.name }}</span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- 5. LANDMARKS & LOCATION NOTES -->
+            {% if property.landmark_notes %}
+            <div class="mb-5">
+                <h3 class="font-heading h4 mb-3 border-bottom pb-2">Location & Proximity</h3>
+                <div class="p-3 bg-white border rounded-3 d-flex align-items-center gap-3">
+                    <i class="bi bi-geo fs-3 text-khaki"></i>
+                    <div>
+                        <div class="fw-bold">Nearby Landmarks</div>
+                        <div class="text-muted small">{{ property.landmark_notes }}</div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Sidebar Widget (Right Column) -->
+        <div class="col-lg-4">
+            <div class="bg-white p-4 rounded-4 border sticky-top shadow-sm" style="top: 100px; z-index: 10;">
+                <h3 class="font-heading h5 mb-3"><i class="bi bi-calendar-check me-2 text-khaki"></i> Book Private Viewing</h3>
+                <p class="small text-muted mb-4">Select your date and time for a guided VIP walk-through with our client advisor.</p>
+
+                <form action="{% url 'tours:schedule' %}" method="post" class="d-flex flex-column gap-3">
+                    {% csrf_token %}
+                    <input type="hidden" name="property" value="{{ property.id }}">
+                    <div>
+                        <label class="form-label small fw-bold text-uppercase text-muted">Full Name</label>
+                        {{ tour_form.full_name }}
+                    </div>
+                    <div>
+                        <label class="form-label small fw-bold text-uppercase text-muted">Email</label>
+                        {{ tour_form.email }}
+                    </div>
+                    <div>
+                        <label class="form-label small fw-bold text-uppercase text-muted">Phone Number</label>
+                        {{ tour_form.phone_number }}
+                    </div>
+                    <div class="row g-2">
+                        <div class="col-6">
+                            <label class="form-label small fw-bold text-uppercase text-muted">Preferred Date</label>
+                            {{ tour_form.preferred_date }}
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label small fw-bold text-uppercase text-muted">Preferred Time</label>
+                            {{ tour_form.preferred_time }}
+                        </div>
+                    </div>
+                    <div>
+                        <label class="form-label small fw-bold text-uppercase text-muted">Special Requests</label>
+                        {{ tour_form.message }}
+                    </div>
+
+                    <button type="submit" class="btn btn-pc-primary w-100 py-3 mt-2">
+                        <i class="bi bi-calendar-event me-2"></i> Schedule My Tour
+                    </button>
+                </form>
+
+                <hr class="my-4">
+
+                <!-- Direct WhatsApp Inquiry -->
+                <div class="text-center">
+                    <div class="small text-muted mb-2">Prefer instant messaging?</div>
+                    <a href="https://wa.me/{{ site_settings.whatsapp_number }}?text=Hello%20Prime%20City%20Properties,%20I%20am%20interested%20in%20inspecting%20{{ property.title|urlencode }}%20(Ref:%20{{ property.id }})" target="_blank" class="btn btn-success w-100 rounded-pill py-2 font-body fw-bold">
+                        <i class="bi bi-whatsapp me-2"></i> Chat on WhatsApp
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

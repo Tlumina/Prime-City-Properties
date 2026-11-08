@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{{ site_settings.company_name }} | {{ site_settings.tagline }}{% endblock %}</title>
+    <meta name="description" content="{% block meta_description %}Prime City Properties is a premier Nigerian real estate agency offering luxury mansions, executive penthouses, serviced apartments, and dry land plots across Lekki, Ikoyi, Victoria Island, and Abuja.{% endblock %}">
+    
+    <!-- Open Graph Metadata -->
+    <meta property="og:title" content="{% block og_title %}{{ site_settings.company_name }} - Stop Searching. Start Living.{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}Discover premier luxury residential homes, executive penthouses, and commercial real estate in Nigeria.{% endblock %}">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ request.build_absolute_uri }}">
+
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏰</text></svg>">
+
+    <!-- Bootstrap 5 CSS & Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    
+    <!-- Custom Design System -->
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+    <!-- Header Navbar -->
+    {% include 'navbar.html' %}
+
+    <!-- Toast Notifications / Messages -->
+    {% if messages %}
+    <div class="container mt-3" style="position: relative; z-index: 1050;">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show border-0 shadow-sm" role="alert">
+            <i class="bi bi-info-circle-fill me-2"></i> {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Main Content -->
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Floating Schedule Tour Button -->
+    {% include 'floating_tour.html' %}
+
+    <!-- Footer -->
+    {% include 'footer.html' %}
+
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

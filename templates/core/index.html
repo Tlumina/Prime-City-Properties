@@ -1,0 +1,321 @@
+{% extends 'base.html' %}
+{% load humanize %}
+
+{% block content %}
+<!-- 1. HERO SECTION -->
+<section class="pc-hero text-center text-md-start">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <span class="pc-hero-motto">
+                    <i class="bi bi-patch-check-fill me-2"></i> {{ site_settings.tagline }}
+                </span>
+                <h1 class="pc-hero-title">
+                    Stop Searching.<br>
+                    <span style="color: var(--pc-gold);">Start Living.</span>
+                </h1>
+                <p class="pc-hero-sub">
+                    {{ site_settings.hero_subheadline }}
+                </p>
+                <div class="d-flex flex-wrap gap-3 justify-content-center justify-content-md-start">
+                    <a href="{% url 'properties:list' %}" class="btn btn-pc-gold btn-lg rounded-pill px-4">
+                        <i class="bi bi-compass-fill me-2"></i> Explore Properties
+                    </a>
+                    <a href="{% url 'tours:schedule' %}" class="btn btn-pc-outline text-white border-white btn-lg rounded-pill px-4">
+                        <i class="bi bi-calendar-event me-2"></i> Schedule a Tour
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 2. ADVANCED SEARCH WIDGET -->
+<div class="container">
+    <div class="pc-search-card">
+        <form action="{% url 'properties:list' %}" method="get" class="row g-3 align-items-end">
+            <div class="col-lg-3 col-md-6">
+                <label class="form-label small fw-bold text-uppercase text-muted">Location</label>
+                {{ search_form.location }}
+            </div>
+            <div class="col-lg-2 col-md-6">
+                <label class="form-label small fw-bold text-uppercase text-muted">Property Type</label>
+                {{ search_form.property_type }}
+            </div>
+            <div class="col-lg-2 col-md-6">
+                <label class="form-label small fw-bold text-uppercase text-muted">Bedrooms</label>
+                {{ search_form.bedrooms }}
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <label class="form-label small fw-bold text-uppercase text-muted">Max Price (₦)</label>
+                {{ search_form.max_price }}
+            </div>
+            <div class="col-lg-2 col-md-12">
+                <button type="submit" class="btn btn-pc-primary w-100 py-3 rounded-3 justify-content-center">
+                    <i class="bi bi-search me-1"></i> Search
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- 3. STATS TICKER -->
+<section class="py-5 bg-white border-bottom mt-5">
+    <div class="container">
+        <div class="row text-center g-4">
+            <div class="col-6 col-md-3">
+                <div class="h2 font-heading fw-bold text-khaki mb-1">{{ stats.portfolio_value }}</div>
+                <div class="text-muted small text-uppercase fw-semibold">Portfolio Volume</div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="h2 font-heading fw-bold text-khaki mb-1">{{ stats.satisfied_clients }}</div>
+                <div class="text-muted small text-uppercase fw-semibold">Satisfied Clients</div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="h2 font-heading fw-bold text-khaki mb-1">{{ stats.locations_count }} Prime</div>
+                <div class="text-muted small text-uppercase fw-semibold">Nigerian Nodes</div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="h2 font-heading fw-bold text-khaki mb-1">100%</div>
+                <div class="text-muted small text-uppercase fw-semibold">C of O Verified</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 4. FEATURED PROPERTIES -->
+<section class="section-padding">
+    <div class="container">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-end mb-5">
+            <div>
+                <div class="section-title-sm">Curated Collection</div>
+                <h2 class="section-title mb-0">Featured Properties</h2>
+            </div>
+            <a href="{% url 'properties:list' %}" class="btn btn-pc-outline rounded-pill mt-3 mt-md-0">
+                View All Properties <i class="bi bi-arrow-right ms-2"></i>
+            </a>
+        </div>
+
+        <div class="row g-4">
+            {% for property in featured_properties %}
+            <div class="col-lg-4 col-md-6">
+                <div class="pc-property-card">
+                    <div class="pc-card-img-wrapper">
+                        <img src="{{ property.primary_image }}" alt="{{ property.title }}" class="pc-card-img" loading="lazy">
+                        <span class="pc-badge-status">{{ property.get_status_display }}</span>
+                        {% if property.is_featured %}
+                        <span class="pc-badge-featured"><i class="bi bi-star-fill me-1"></i> Featured</span>
+                        {% endif %}
+                    </div>
+                    <div class="pc-card-body">
+                        <div class="pc-card-price">{{ property.formatted_price }} <small class="fs-6 text-muted fw-normal">{{ property.price_label|default:'' }}</small></div>
+                        <h3 class="pc-card-title">
+                            <a href="{{ property.get_absolute_url }}">{{ property.title }}</a>
+                        </h3>
+                        <div class="pc-card-location">
+                            <i class="bi bi-geo-alt-fill text-gold" style="color: var(--pc-gold);"></i>
+                            {{ property.location.name }}, {{ property.location.city }}
+                        </div>
+                        <div class="pc-card-specs">
+                            <div class="pc-spec-item" title="Bedrooms"><i class="bi bi-door-open fs-5 text-muted"></i> {{ property.bedrooms }} Beds</div>
+                            <div class="pc-spec-item" title="Bathrooms"><i class="bi bi-droplet fs-5 text-muted"></i> {{ property.bathrooms }} Baths</div>
+                            <div class="pc-spec-item" title="Area Size"><i class="bi bi-aspect-ratio fs-5 text-muted"></i> {{ property.size_sqm }} sqm</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center py-5">
+                <p class="text-muted">No featured properties currently available. Check back soon!</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- 5. PROPERTY CATEGORIES -->
+<section class="section-padding bg-white">
+    <div class="container">
+        <div class="text-center max-w-lg mx-auto mb-5">
+            <div class="section-title-sm">Tailored Portfolio</div>
+            <h2 class="section-title">Explore by Property Category</h2>
+            <p class="text-muted">Whether searching for a waterfront villa, high-rise penthouse, or commercial hub, find your ideal investment.</p>
+        </div>
+
+        <div class="row g-4">
+            {% for cat in categories %}
+            <div class="col-lg-4 col-md-6">
+                <a href="{% url 'properties:list' %}?property_type={{ cat.id }}" class="text-decoration-none">
+                    <div class="p-4 rounded-4 border bg-cream-alt h-100 transition-all hover-elevate d-flex align-items-center gap-4" style="background-color: var(--pc-cream-alt);">
+                        <div class="rounded-circle bg-khaki text-gold p-3 fs-2 d-flex align-items-center justify-content-center" style="width: 64px; height: 64px; background-color: var(--pc-khaki); color: var(--pc-gold);">
+                            <i class="bi {{ cat.icon_class|default:'bi-building' }}"></i>
+                        </div>
+                        <div>
+                            <h4 class="h5 mb-1 text-ebony">{{ cat.name }}</h4>
+                            <p class="small text-muted mb-0">{{ cat.description|default:'Explore available listings' }}</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- 6. WHY CHOOSE PRIME CITY PROPERTIES -->
+<section class="section-padding bg-cream" style="background-color: var(--pc-cream);">
+    <div class="container">
+        <div class="row align-items-center g-5">
+            <div class="col-lg-6">
+                <div class="position-relative">
+                    <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=800&q=80" alt="Prime City Properties Luxury Home" class="img-fluid rounded-4 shadow-lg">
+                    <div class="position-absolute bottom-0 end-0 bg-ebony text-gold p-4 rounded-4 m-3 shadow d-none d-sm-block" style="background: var(--pc-ebony); color: var(--pc-gold); max-width: 260px;">
+                        <i class="bi bi-shield-check fs-1"></i>
+                        <div class="fw-bold mt-2">Legal Security</div>
+                        <div class="small opacity-75 text-white">100% C of O & Governor's Consent Audited</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="section-title-sm">Our Distinction</div>
+                <h2 class="section-title">Why Nigerian Buyers & Investors Choose Us</h2>
+                <p class="text-muted mb-4">
+                    Navigating real estate in Nigeria requires absolute trust, legal transparency, and local market intelligence. At Prime City Properties, we eliminate risk and streamline property acquisitions.
+                </p>
+
+                <div class="d-flex gap-3 mb-4">
+                    <div class="text-gold fs-3" style="color: var(--pc-gold);"><i class="bi bi-file-earmark-check-fill"></i></div>
+                    <div>
+                        <h4 class="h6 fw-bold mb-1">Title Perfection & Audit</h4>
+                        <p class="small text-muted mb-0">Every property in our portfolio undergoes thorough legal verification at the State Lands Registry.</p>
+                    </div>
+                </div>
+
+                <div class="d-flex gap-3 mb-4">
+                    <div class="text-gold fs-3" style="color: var(--pc-gold);"><i class="bi bi-award-fill"></i></div>
+                    <div>
+                        <h4 class="h6 fw-bold mb-1">Prime Locations Only</h4>
+                        <p class="small text-muted mb-0">We curate real estate exclusively in high-appreciation nodes like Lekki Phase 1, Ikoyi, Victoria Island, and Maitama.</p>
+                    </div>
+                </div>
+
+                <div class="d-flex gap-3 mb-4">
+                    <div class="text-gold fs-3" style="color: var(--pc-gold);"><i class="bi bi-person-badge-fill"></i></div>
+                    <div>
+                        <h4 class="h6 fw-bold mb-1">Dedicated Private Advisors</h4>
+                        <p class="small text-muted mb-0">From initial consultation to key handover, our senior advisors offer discreet white-glove guidance.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 7. NIGERIAN LOCATIONS SERVED -->
+<section class="section-padding">
+    <div class="container">
+        <div class="text-center max-w-lg mx-auto mb-5">
+            <div class="section-title-sm">Prime Nodes</div>
+            <h2 class="section-title">Nigerian Locations We Serve</h2>
+            <p class="text-muted">Discover properties in Nigeria's most prestigious commercial and residential communities.</p>
+        </div>
+
+        <div class="row g-4">
+            {% for loc in locations %}
+            <div class="col-lg-4 col-md-6">
+                <a href="{% url 'properties:list' %}?location={{ loc.id }}" class="text-decoration-none">
+                    <div class="position-relative rounded-4 overflow-hidden shadow-sm" style="height: 220px;">
+                        <img src="{{ loc.primary_image }}" alt="{{ loc.name }}" class="w-100 h-100 object-fit-cover transition-all" style="object-fit: cover;">
+                        <div class="position-absolute inset-0 bg-dark opacity-50" style="position: absolute; top:0; left:0; right:0; bottom:0; background: rgba(28,22,20,0.55);"></div>
+                        <div class="position-absolute bottom-0 start-0 p-4 text-white">
+                            <h3 class="h4 mb-1 text-white font-heading">{{ loc.name }}</h3>
+                            <p class="small text-white-50 mb-0"><i class="bi bi-geo-alt me-1 text-gold" style="color: var(--pc-gold);"></i> {{ loc.city }}, {{ loc.state }}</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- 8. HOW IT WORKS -->
+<section class="section-padding bg-white border-top">
+    <div class="container text-center">
+        <div class="section-title-sm">Simple Seamless Process</div>
+        <h2 class="section-title mb-5">How It Works</h2>
+
+        <div class="row g-4">
+            <div class="col-md-3">
+                <div class="p-4">
+                    <div class="fs-1 text-khaki mb-3"><i class="bi bi-search"></i></div>
+                    <h3 class="h5 fw-bold mb-2">1. Browse & Filter</h3>
+                    <p class="small text-muted">Explore verified properties with transparent Naira pricing and specs.</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="p-4">
+                    <div class="fs-1 text-khaki mb-3"><i class="bi bi-calendar-event"></i></div>
+                    <h3 class="h5 fw-bold mb-2">2. Schedule a Tour</h3>
+                    <p class="small text-muted">Pick your preferred date and time for a private VIP walk-through.</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="p-4">
+                    <div class="fs-1 text-khaki mb-3"><i class="bi bi-shield-check"></i></div>
+                    <h3 class="h5 fw-bold mb-2">3. Legal Verification</h3>
+                    <p class="small text-muted">Review verified title deeds, land searches, and legal agreements.</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="p-4">
+                    <div class="fs-1 text-khaki mb-3"><i class="bi bi-key-fill"></i></div>
+                    <h3 class="h5 fw-bold mb-2">4. Key Handover</h3>
+                    <p class="small text-muted">Finalize transaction smoothly and start living in your dream home.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 9. TESTIMONIALS -->
+<section class="section-padding bg-cream" style="background-color: var(--pc-cream);">
+    <div class="container">
+        <div class="text-center mb-5">
+            <div class="section-title-sm">Client Endorsements</div>
+            <h2 class="section-title">What Our Clients Say</h2>
+        </div>
+
+        <div class="row g-4">
+            {% for t in testimonials %}
+            <div class="col-md-4">
+                <div class="pc-testimonial-card">
+                    <div class="pc-quote-icon mb-3"><i class="bi bi-quote"></i></div>
+                    <p class="text-muted fst-italic mb-4">“{{ t.quote }}”</p>
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="rounded-circle bg-khaki text-white fw-bold d-flex align-items-center justify-content-center" style="width: 48px; height: 48px; background-color: var(--pc-khaki);">
+                            {{ t.client_name|slice:":1" }}
+                        </div>
+                        <div>
+                            <div class="fw-bold text-ebony">{{ t.client_name }}</div>
+                            <div class="small text-muted">{{ t.client_role_or_location }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- 10. CALL TO ACTION -->
+<section class="py-5 bg-ebony text-white" style="background: var(--pc-ebony);">
+    <div class="container text-center py-4">
+        <h2 class="font-heading text-white mb-3">Ready to Stop Searching and Start Living?</h2>
+        <p class="text-light opacity-75 max-w-lg mx-auto mb-4">Schedule your private property tour today with one of our senior client advisors.</p>
+        <a href="{% url 'tours:schedule' %}" class="btn btn-pc-gold btn-lg rounded-pill px-5">
+            <i class="bi bi-calendar-check me-2"></i> Book Your Tour Now
+        </a>
+    </div>
+</section>
+{% endblock %}

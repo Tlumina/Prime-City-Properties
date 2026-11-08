@@ -1,0 +1,90 @@
+<footer class="pc-footer">
+    <div class="container">
+        <div class="row g-4">
+            <!-- Brand & Tagline -->
+            <div class="col-lg-4 col-md-6">
+                <div class="pc-brand mb-3">
+                    <div class="pc-brand-logo bg-warning text-dark">P</div>
+                    <div>
+                        <div class="pc-brand-title text-white">PRIME CITY</div>
+                        <div class="pc-brand-sub text-gold" style="color: var(--pc-gold);">PROPERTIES</div>
+                    </div>
+                </div>
+                <p class="fst-italic text-light opacity-75 mb-3">“Stop Searching. Start Living.”</p>
+                <p class="small text-light opacity-75">
+                    Prime City Properties is a premier Nigerian real estate enterprise specializing in luxury
+                    residential acquisitions, penthouses, commercial real estate, and verified land banking across
+                    Akure, Lagos, Abuja, and Port Harcourt.
+                </p>
+            </div>
+
+            <!-- Quick Links -->
+            <div class="col-lg-2 col-md-6">
+                <h5>Navigation</h5>
+                <ul class="pc-footer-links">
+                    <li><a href="{% url 'core:home' %}"><i class="bi bi-chevron-right me-1"></i> Home</a></li>
+                    <li><a href="{% url 'properties:list' %}"><i class="bi bi-chevron-right me-1"></i> Listings</a></li>
+                    <li><a href="{% url 'core:about' %}"><i class="bi bi-chevron-right me-1"></i> About Us</a></li>
+                    <li><a href="{% url 'tours:schedule' %}"><i class="bi bi-chevron-right me-1"></i> Book a Tour</a>
+                    </li>
+                    <li><a href="{% url 'contact:index' %}"><i class="bi bi-chevron-right me-1"></i> Contact Us</a></li>
+                </ul>
+            </div>
+
+            <!-- Legal Links -->
+            <div class="col-lg-3 col-md-6">
+                <h5>Legal & Compliance</h5>
+                <ul class="pc-footer-links">
+                    <li><a href="{% url 'core:terms' %}"><i class="bi bi-chevron-right me-1"></i> Terms & Conditions</a>
+                    </li>
+                    <li><a href="{% url 'core:refund_policy' %}"><i class="bi bi-chevron-right me-1"></i> Refund
+                            Policy</a></li>
+                    <li><a href="{% url 'core:privacy_policy' %}"><i class="bi bi-chevron-right me-1"></i> Privacy
+                            Policy</a></li>
+                    <li><a href="{% url 'core:accessibility' %}"><i class="bi bi-chevron-right me-1"></i> Accessibility
+                            Statement</a></li>
+                </ul>
+            </div>
+
+            <!-- Contact Info -->
+            <div class="col-lg-3 col-md-6">
+                <h5>Contact Headquarters</h5>
+                <ul class="list-unstyled small text-light opacity-75 d-flex flex-column gap-2">
+                    <li class="d-flex gap-2">
+                        <i class="bi bi-geo-alt-fill text-gold" style="color: var(--pc-gold);"></i>
+                        <span>{{ site_settings.office_address }}</span>
+                    </li>
+                    <li class="d-flex gap-2">
+                        <i class="bi bi-telephone-fill text-gold" style="color: var(--pc-gold);"></i>
+                        <span>{{ site_settings.phone_number }}</span>
+                    </li>
+                    <li class="d-flex gap-2">
+                        <i class="bi bi-envelope-fill text-gold" style="color: var(--pc-gold);"></i>
+                        <span>{{ site_settings.email }}</span>
+                    </li>
+                    <li class="d-flex gap-2">
+                        <i class="bi bi-clock-fill text-gold" style="color: var(--pc-gold);"></i>
+                        <span>{{ site_settings.business_hours }}</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="pc-footer-bottom d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
+            <div class="small">
+                &copy; {% now "Y" %} {{ site_settings.company_name }}. All rights reserved. Registered under Nigerian
+                Real Estate Regulatory Framework.
+            </div>
+            <div class="d-flex gap-3 fs-5">
+                <a href="{{ site_settings.instagram_url }}" target="_blank" class="text-white opacity-75 hover-gold"><i
+                        class="bi bi-instagram"></i></a>
+                <a href="{{ site_settings.facebook_url }}" target="_blank" class="text-white opacity-75 hover-gold"><i
+                        class="bi bi-facebook"></i></a>
+                <a href="{{ site_settings.linkedin_url }}" target="_blank" class="text-white opacity-75 hover-gold"><i
+                        class="bi bi-linkedin"></i></a>
+                <a href="https://wa.me/{{ site_settings.whatsapp_number }}" target="_blank"
+                    class="text-white opacity-75 hover-gold"><i class="bi bi-whatsapp"></i></a>
+            </div>
+        </div>
+    </div>
+</footer>
